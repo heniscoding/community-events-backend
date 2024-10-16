@@ -16,16 +16,37 @@ const eventSchema = new mongoose.Schema({
     type: String,
   },
   createdBy: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   participants: [
     {
-      userId: { type: String, required: true },
-      email: { type: String, required: true },
+      userId: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      email: { 
+        type: String, 
+        required: true 
+      },
     },
   ],
-});
+  imageUrl: {
+    type: String,
+    required: false,
+  },
+  category: {
+    type: String,
+    required: false,
+  },
+  capacity: {
+    type: Number,
+    required: false,
+    min: 0,
+  },
+}, { timestamps: true });
 
 const Event = mongoose.model('Event', eventSchema);
 module.exports = Event;
