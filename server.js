@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 mongoose
@@ -22,8 +21,8 @@ const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 
 app.use("/api/events", eventRoutes);
-app.use("/api", registerRoute);
-app.use("/api", loginRoute);
+app.use("/api/register", registerRoute);
+app.use("/api/login", loginRoute);
 
 app.get("/", (req, res) => {
   res.send("API is running");

@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const router = express.Router();
 
@@ -8,7 +9,7 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
-router.post("/register", async (req, res) => {
+router.post("/", async (req, res) => {
   const { username, email, password, role } = req.body;
 
   if (!username || !email || !password || !role) {
@@ -22,10 +23,13 @@ router.post("/register", async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already in use" });
+      return res.status(409).json({ message: "Email already in use" });
     }
 
-    const newUser = new User({ username, email, password, role });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
 
     const token = jwt.sign(
