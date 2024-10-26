@@ -1,6 +1,6 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 const router = express.Router();
 
 const validateEmail = (email) => {
@@ -8,34 +8,38 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
-router.post('/register', async (req, res) => {
-  const { email, password, role } = req.body;
+router.post("/register", async (req, res) => {
+  const { username, email, password, role } = req.body;
 
-  if (!email || !password || !role) {
-    return res.status(400).json({ message: 'Please fill in all fields' });
+  if (!username || !email || !password || !role) {
+    return res.status(400).json({ message: "Please fill in all fields" });
   }
 
   if (!validateEmail(email)) {
-    return res.status(400).json({ message: 'Invalid email format' });
+    return res.status(400).json({ message: "Invalid email format" });
   }
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use' });
+      return res.status(400).json({ message: "Email already in use" });
     }
 
-    const newUser = new User({ email, password, role });
+    const newUser = new User({ username, email, password, role });
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.status(201).json({ token, role: newUser.role });
   } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Error registering user' });
+    console.error("Error registering user:", error);
+    res.status(500).json({ message: "Error registering user" });
   }
 });
 
