@@ -73,18 +73,11 @@ router.post(
 );
 
 router.get('/', async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
   try {
-    const events = await Event.find()
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit))
-      .exec();
-    const totalEvents = await Event.countDocuments();
-
+    const events = await Event.find().sort({ date: -1 }).exec();
+    
     res.status(200).json({
       events,
-      totalPages: Math.ceil(totalEvents / limit),
-      currentPage: page,
     });
   } catch (error) {
     handleError(res, error, 'Error fetching events');
