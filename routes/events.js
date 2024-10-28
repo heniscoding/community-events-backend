@@ -48,7 +48,7 @@ router.post(
     const { name, date, endDate, location, description, category, capacity, type } = req.body;
     const createdBy = req.user.id;
 
-    const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}` : null;
+    const imageUrl = req.file ? `https://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}` : null;
 
     try {
       const newEvent = new Event({
