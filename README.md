@@ -116,7 +116,6 @@ Once the backend is running, it can be used in conjunction with the front-end pl
 - **User Authentication**: Secure authentication with JWT to protect routes and sessions.
 - **Role-Based Permissions**: Only staff members can create or manage events.
 - **Image Uploads**: Event images are handled with **Multer** and stored in the `uploads/` directory.
-- **Pagination**: Supports pagination for event listings to enhance performance.
 
 ## Contributing
 
