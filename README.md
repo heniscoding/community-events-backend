@@ -2,6 +2,8 @@
 
 Welcome to the **Community Events Backend**! This backend server is designed to support the Community Events platform, providing secure APIs for user authentication, event management, and user roles. The server is built using Node.js, Express, and MongoDB to manage data related to events, users, and registrations.
 
+A hosted version of the backend server can be found at [community-events-backend-gv6v.onrender.com](https://community-events-backend-gv6v.onrender.com/).
+
 ## Table of Contents
 - [Description](#description)
 - [Installation](#installation)
