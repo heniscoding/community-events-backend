@@ -5,11 +5,19 @@ const User = require("../models/userModel");
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
+  console.log("Login request received", req.body);
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
+    if (!user) {
+      console.log("User not found");
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isPasswordCorrect = await user.matchPassword(password);
+    if (!isPasswordCorrect) {
+      console.log("Password does not match");
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
@@ -27,5 +35,6 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;
