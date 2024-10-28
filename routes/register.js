@@ -1,6 +1,5 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const router = express.Router();
 
@@ -26,18 +25,13 @@ router.post("/", async (req, res) => {
       return res.status(409).json({ message: "Email already in use" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({ username, email, password: hashedPassword, role });
+    const newUser = new User({ username, email, password, role });
     await newUser.save();
 
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
+      { expiresIn: "1h" }
     );
 
     res.status(201).json({ token, role: newUser.role });
